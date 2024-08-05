@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blossom Boy Beta Test</title>
+    <title>Poetry Collections</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,8 +16,7 @@
             min-height: 100vh;
             background-color: #f0f0f0;
         }
-        #imageDisplay {
-            cursor: pointer;
+        .container {
             width: 90%;
             max-width: 800px;
             background-color: white;
@@ -25,15 +24,33 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
             text-align: center;
         }
-        img {
-            max-width: 100%;
-            height: auto;
+        .collections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .collection {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .collection:hover {
+            background-color: #e9e9e9;
+        }
+        .favorites {
+            margin-top: 30px;
         }
         @media (max-width: 600px) {
-            #imageDisplay {
+            .container {
                 width: 95%;
                 padding: 10px;
             }
@@ -41,85 +58,43 @@
     </style>
 </head>
 <body>
-    <div id="imageDisplay">TEST</div>
+    <div class="container">
+        <h1>Poetry Collections</h1>
+        <div class="collections">
+            <div class="collection" onclick="openCollection('collection1.html')">Collection 1</div>
+            <div class="collection" onclick="openCollection('collection2.html')">Collection 2</div>
+            <div class="collection" onclick="openCollection('collection3.html')">Collection 3</div>
+            <div class="collection" onclick="openCollection('blossom-boy.html')">Blossom Boy</div>
+        </div>
+        <div class="favorites">
+            <h2>Favorites</h2>
+            <div id="favoritesList"></div>
+        </div>
+    </div>
+
     <script>
-    const imageFiles = [
-        "Test 20240512 -1.2 -pages-images-0.jpg",
-        "Test 20240512 -1.2 -pages-images-1.jpg",
-        "Test 20240512 -1.2 -pages-images-2.jpg",
-        "Test 20240512 -1.2 -pages-images-3.jpg",
-        "Test 20240512 -1.2 -pages-images-4.jpg",
-        "Test 20240512 -1.2 -pages-images-5.jpg",
-        "Test 20240512 -1.2 -pages-images-6.jpg",
-        "Test 20240512 -1.2 -pages-images-7.jpg",
-        "Test 20240512 -1.2 -pages-images-8.jpg",
-        "Test 20240512 -1.2 -pages-images-9.jpg",
-        "Test 20240512 -1.2 -pages-images-10.jpg",
-        "Test 20240512 -1.2 -pages-images-11.jpg",
-        "Test 20240512 -1.2 -pages-images-12.jpg",
-        "Test 20240512 -1.2 -pages-images-13.jpg",
-        "Test 20240512 -1.2 -pages-images-14.jpg",
-        "Test 20240512 -1.2 -pages-images-15.jpg",
-        "Test 20240512 -1.2 -pages-images-16.jpg",
-        "Test 20240512 -1.2 -pages-images-17.jpg",
-        "Test 20240512 -1.2 -pages-images-18.jpg",
-        "Test 20240512 -1.2 -pages-images-19.jpg",
-        "Test 20240512 -1.2 -pages-images-20.jpg",
-        "Test 20240512 -1.2 -pages-images-21.jpg",
-        "Test 20240512 -1.2 -pages-images-22.jpg",
-        "Test 20240512 -1.2 -pages-images-23.jpg",
-        "Test 20240512 -1.2 -pages-images-24.jpg",
-        "Test 20240512 -1.2 -pages-images-25.jpg",
-        "Test 20240512 -1.2 -pages-images-26.jpg",
-        "Test 20240512 -1.2 -pages-images-27.jpg",
-        "Test 20240512 -1.2 -pages-images-28.jpg",
-        "Test 20240512 -1.2 -pages-images-29.jpg",
-        "Test 20240512 -1.2 -pages-images-30.jpg",
-        "Test 20240512 -1.2 -pages-images-31.jpg",
-        "Test 20240512 -1.2 -pages-images-32.jpg",
-        "Test 20240512 -1.2 -pages-images-33.jpg",
-        "Test 20240512 -1.2 -pages-images-34.jpg",
-        "Test 20240512 -1.2 -pages-images-35.jpg",
-        "Test 20240512 -1.2 -pages-images-36.jpg",
-        "Test 20240512 -1.2 -pages-images-37.jpg",
-        "Test 20240512 -1.2 -pages-images-38.jpg",
-        "Test 20240512 -1.2 -pages-images-39.jpg",
-        "Test 20240512 -1.2 -pages-images-40.jpg",
-        "Test 20240512 -1.2 -pages-images-41.jpg",
-        "Test 20240512 -1.2 -pages-images-42.jpg",
-        "Test 20240512 -1.2 -pages-images-43.jpg",
-        "Test 20240512 -1.2 -pages-images-44.jpg",
-        "Test 20240512 -1.2 -pages-images-45.jpg",
-        "Test 20240512 -1.2 -pages-images-46.jpg",
-        "Test 20240512 -1.2 -pages-images-47.jpg",
-        "Test 20240512 -1.2 -pages-images-48.jpg",
-        "Test 20240512 -1.2 -pages-images-49.jpg"
-    ];
-    const imageDisplay = document.getElementById('imageDisplay');
-    let currentIndex = 0;
-    let randomImages = [];
-
-    function showNextImage() {
-        let imageFile;
-        if (currentIndex < 2) {
-            imageFile = imageFiles[currentIndex];
-            currentIndex++;
-        } else if (currentIndex < imageFiles.length - 1) {
-            if (randomImages.length === 0) {
-                randomImages = imageFiles.slice(2, -1).sort(() => Math.random() - 0.5);
-            }
-            imageFile = randomImages.pop();
-            currentIndex++;
-        } else {
-            imageFile = imageFiles[imageFiles.length - 1];
-            currentIndex = 0;
-            randomImages = [];
+        function openCollection(url) {
+            window.location.href = url;
         }
-        
-        imageDisplay.innerHTML = `<img src="${imageFile}" alt="Random Image">`;
-    }
 
-    imageDisplay.addEventListener('click', showNextImage);
+        // Load and display favorites
+        function loadFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+            const favoritesList = document.getElementById('favoritesList');
+            favoritesList.innerHTML = '';
+
+            for (const [collection, poems] of Object.entries(favorites)) {
+                poems.forEach(poem => {
+                    const poemElement = document.createElement('div');
+                    poemElement.textContent = `${collection}: ${poem}`;
+                    poemElement.onclick = () => openCollection(`${collection}.html#${poem}`);
+                    favoritesList.appendChild(poemElement);
+                });
+            }
+        }
+
+        // Load favorites when the page loads
+        window.onload = loadFavorites;
     </script>
 </body>
 </html>
