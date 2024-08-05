@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Test - Blossom Boy Beta Test</title>
+    <style>
+        /* Styles remain the same */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #imageDisplay {
+            cursor: pointer;
+            width: 90%;
+            max-width: 800px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .nav-buttons {
+            margin-top: 20px;
+        }
+        button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            #imageDisplay {
+                width: 95%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="imageDisplay"></div>
+    <div class="nav-buttons">
+        <button onclick="goToHome()">Home</button>
+        <button onclick="toggleFavorite()">Favorite</button>
+    </div>
+    <script>
+    const imageFiles = [
+        "Test 20240512 -1.2 -pages-images-0.jpg",
+        // ... (all the image files)
+        "Test 20240512 -1.2 -pages-images-49.jpg"
+    ];
+    const imageDisplay = document.getElementById('imageDisplay');
+    let currentIndex = 0;
+    let randomImages = [];
+
+    function showNextImage() {
+        let imageFile;
+        if (currentIndex < 2) {
+            imageFile = imageFiles[currentIndex];
+            currentIndex++;
+        } else if (currentIndex < imageFiles.length - 1) {
+            if (randomImages.length === 0) {
+                randomImages = imageFiles.slice(2, -1).sort(() => Math.random() - 0.5);
+            }
+            imageFile = randomImages.pop();
+            currentIndex++;
+        } else {
+            imageFile = imageFiles[imageFiles.length - 1];
+            currentIndex = 0;
+            randomImages = [];
+        }
+        
+        imageDisplay.innerHTML = `<img src="${imageFile}" alt="Test Collection Image">`;
+        updateFavoriteButton();
+    }
+
+    function goToHome() {
+        window.location.href
